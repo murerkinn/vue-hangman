@@ -1,6 +1,6 @@
 <template>
   <h1>Vue Hangman</h1>
-  <i>Don't stop and enter a letter</i>
+  <p>Don't stop and enter a letter</p>
 </template>
 
 <script>
@@ -11,6 +11,9 @@ export default {
 
 <style>
 h1 {
-  margin-bottom: 20px;
+  margin: 5vh 0 2vh 0;
+}
+p {
+  margin-bottom: 5vh;
 }
 </style>

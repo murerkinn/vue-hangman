@@ -1,12 +1,23 @@
 <template>
   <div class="wrong-letters-container">
-    <div id="wrong-letters"></div>
+    <div>
+      <p v-if="wrongLetters.length">Wrong</p>
+      <span v-for="(letter, index) in wrongLetters" :key="index">
+        {{ letter }},
+      </span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "WrongLetters"
+  name: "WrongLetters",
+  props: {
+    wrongLetters: {
+      type: Array,
+      required: true
+    }
+  }
 };
 </script>
 

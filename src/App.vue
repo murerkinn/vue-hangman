@@ -2,8 +2,8 @@
   <Header />
   <div class="game-container">
     <Figure />
-    <WrongLetters />
-    <Word />
+    <WrongLetters :wrongLetters="wrongLetters" />
+    <Word :selectedWord="selectedWord" :correctLetters="correctLetters" />
   </div>
   <Popup />
   <Notification />
@@ -26,6 +26,51 @@ export default {
     Word,
     Popup,
     Notification
+  },
+  data() {
+    return {
+      words: ["composition", "hangman", "development", "framework"],
+      playable: true,
+      correctLetters: [],
+      wrongLetters: []
+    };
+  },
+  computed: {
+    selectedWord() {
+      return this.words[Math.floor(Math.random() * this.words.length)];
+    }
+  },
+  methods: {
+    handleKeyDown(e) {
+      const { key, keyCode } = e;
+      if (this.playable && keyCode >= 65 && keyCode <= 90) {
+        const letter = key.toLowerCase();
+
+        if (this.selectedWord.includes(letter)) {
+          if (!this.correctLetters.includes(letter)) {
+            this.correctLetters.push(letter);
+          } else {
+            // this.showNotification();
+          }
+        } else {
+          if (!this.wrongLetters.includes(letter)) {
+            this.wrongLetters.push(letter);
+          } else {
+            // this.showNotification();
+          }
+        }
+      }
+    }
+    // showNotification() {
+    //   Notification.classList.add("show");
+
+    //   setTimeout(() => {
+    //     Notification.classList.remove("show");
+    //   }, 2000);
+    // }
+  },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeyDown);
   }
 };
 </script>
@@ -33,8 +78,6 @@ export default {
 <style>
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
@@ -43,7 +86,6 @@ body {
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   height: 100vh;
   overflow: hidden;
@@ -55,16 +97,5 @@ body {
   margin: auto;
   height: 350px;
   width: 450px;
-}
-
-.letter {
-  border-bottom: 3px solid #2980b9;
-  display: inline-flex;
-  font-size: 30px;
-  align-items: center;
-  justify-content: center;
-  margin: 0 3px;
-  height: 50px;
-  width: 20px;
 }
 </style>
