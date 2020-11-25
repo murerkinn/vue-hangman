@@ -1,12 +1,18 @@
 <template>
-  <div class="notification-container" id="notification-container">
+  <div :class="[{ show: not }, 'notification-container']">
     <p>You have already entered this letter</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Notification"
+  name: "Notification",
+  props: {
+    not: {
+      type: Boolean,
+      required: true
+    }
+  }
 };
 </script>
 

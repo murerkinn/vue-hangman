@@ -1,12 +1,12 @@
 <template>
   <Header />
   <div class="game-container">
-    <Figure />
+    <Figure :wrongLetters="wrongLetters" />
     <WrongLetters :wrongLetters="wrongLetters" />
     <Word :selectedWord="selectedWord" :correctLetters="correctLetters" />
   </div>
   <Popup />
-  <Notification />
+  <Notification :not="notification" />
 </template>
 
 <script>
@@ -32,7 +32,8 @@ export default {
       words: ["composition", "hangman", "development", "framework"],
       playable: true,
       correctLetters: [],
-      wrongLetters: []
+      wrongLetters: [],
+      notification: false
     };
   },
   computed: {
@@ -43,31 +44,33 @@ export default {
   methods: {
     handleKeyDown(e) {
       const { key, keyCode } = e;
-      if (this.playable && keyCode >= 65 && keyCode <= 90) {
+      const forbiddens = [8, 9, 16, 17, 18, 20, 37, 38, 39, 40];
+      const regex = /[a-zA-Z]/;
+      if (this.playable && regex.test(key) && !forbiddens.includes(keyCode)) {
         const letter = key.toLowerCase();
 
         if (this.selectedWord.includes(letter)) {
           if (!this.correctLetters.includes(letter)) {
             this.correctLetters.push(letter);
           } else {
-            // this.showNotification();
+            this.showNotification();
           }
         } else {
           if (!this.wrongLetters.includes(letter)) {
             this.wrongLetters.push(letter);
           } else {
-            // this.showNotification();
+            this.showNotification();
           }
         }
       }
-    }
-    // showNotification() {
-    //   Notification.classList.add("show");
+    },
+    showNotification() {
+      this.notification = true;
 
-    //   setTimeout(() => {
-    //     Notification.classList.remove("show");
-    //   }, 2000);
-    // }
+      setTimeout(() => {
+        this.notification = false;
+      }, 2000);
+    }
   },
   mounted() {
     window.addEventListener("keydown", this.handleKeyDown);
