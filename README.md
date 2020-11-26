@@ -1,4 +1,4 @@
-# vue-hangman
+![Vue Hangman Logo](/src/assets/logo.PNG)
 
 ## Project setup
 ```
