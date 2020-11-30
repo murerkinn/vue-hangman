@@ -5,7 +5,7 @@
     <WrongLetters :wrongLetters="wrongLetters" />
     <Word :selectedWord="selectedWord" :correctLetters="correctLetters" />
   </div>
-  <Popup />
+  <Popup :status="status" :selectedWord="selectedWord" />
   <Notification :not="notification" />
 </template>
 
@@ -33,12 +33,17 @@ export default {
       playable: true,
       correctLetters: [],
       wrongLetters: [],
-      notification: false
+      notification: false,
+      status: ""
     };
   },
   computed: {
     selectedWord() {
       return this.words[Math.floor(Math.random() * this.words.length)];
+    },
+    sizeOfSelectedWordSet() {
+      const set = new Set(this.selectedWord.split(""));
+      return set.size;
     }
   },
   methods: {
@@ -62,6 +67,8 @@ export default {
             this.showNotification();
           }
         }
+
+        this.checkWin();
       }
     },
     showNotification() {
@@ -70,7 +77,18 @@ export default {
       setTimeout(() => {
         this.notification = false;
       }, 2000);
+    },
+    checkWin() {
+      // check for win
+      if (this.sizeOfSelectedWordSet === this.correctLetters.length)
+        this.status = "win";
+
+      // check for lose
+      if (this.wrongLetters.length === 6) this.status = "lose";
     }
+  },
+  created() {
+    this.checkWin();
   },
   mounted() {
     window.addEventListener("keydown", this.handleKeyDown);
