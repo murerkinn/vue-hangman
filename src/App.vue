@@ -11,6 +11,12 @@
     @play-again="playAgain"
   />
   <Notification :not="notification" />
+  <span class="footer">
+    @2020 - Made by Murat Erkin Cicek with ❤️ | View on
+    <a href="https://github.com/murerkinn/vue-hangman" target="_blank">
+      Github
+    </a>
+  </span>
 </template>
 
 <script>
@@ -143,5 +149,10 @@ body {
   margin: auto;
   height: 350px;
   width: 450px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 30px;
 }
 </style>
