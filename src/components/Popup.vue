@@ -68,6 +68,7 @@ export default {
   font-size: 16px;
   border-radius: 5px;
   transition: all 200ms ease-in-out;
+  border: 1px solid #f15032;
 }
 
 .popup button:hover {

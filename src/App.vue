@@ -5,7 +5,11 @@
     <WrongLetters :wrongLetters="wrongLetters" />
     <Word :selectedWord="selectedWord" :correctLetters="correctLetters" />
   </div>
-  <Popup :status="status" :selectedWord="selectedWord" />
+  <Popup
+    :status="status"
+    :selectedWord="selectedWord"
+    @play-again="playAgain"
+  />
   <Notification :not="notification" />
 </template>
 
@@ -30,6 +34,7 @@ export default {
   data() {
     return {
       words: ["composition", "hangman", "development", "framework"],
+      selectedWord: "",
       playable: true,
       correctLetters: [],
       wrongLetters: [],
@@ -38,15 +43,17 @@ export default {
     };
   },
   computed: {
-    selectedWord() {
-      return this.words[Math.floor(Math.random() * this.words.length)];
-    },
-    sizeOfSelectedWordSet() {
+    sizeOfSelectedWordSet: function() {
       const set = new Set(this.selectedWord.split(""));
       return set.size;
     }
   },
   methods: {
+    selectWord() {
+      this.selectedWord = this.words[
+        Math.floor(Math.random() * this.words.length)
+      ];
+    },
     handleKeyDown(e) {
       const { key, keyCode } = e;
       const forbiddens = [8, 9, 16, 17, 18, 20, 37, 38, 39, 40];
@@ -80,14 +87,32 @@ export default {
     },
     checkWin() {
       // check for win
-      if (this.sizeOfSelectedWordSet === this.correctLetters.length)
+      if (this.sizeOfSelectedWordSet === this.correctLetters.length) {
+        this.playable = false;
         this.status = "win";
+      }
 
       // check for lose
-      if (this.wrongLetters.length === 6) this.status = "lose";
+      if (this.wrongLetters.length === 6) {
+        this.playable = false;
+        this.status = "lose";
+      }
+    },
+    playAgain() {
+      // you can set everything to their first values and select another random word
+      /* this.playable = true;
+         this.status = "";
+         this.correctLetters = [];
+         this.wrongLetters = [];
+         this.selectWord(); */
+
+      // or you can just refresh the page
+      location.reload();
+      return false;
     }
   },
   created() {
+    this.selectWord();
     this.checkWin();
   },
   mounted() {
